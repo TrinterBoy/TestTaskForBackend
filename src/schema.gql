@@ -1,0 +1,105 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Int!
+  name: String!
+  surname: String!
+  role: UserRoles!
+  age: Int!
+  email: Int!
+  password: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  blogs: [Blog!]
+}
+
+enum UserRoles {
+  WRITER
+  MODERATOR
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Post {
+  id: Int!
+  header: String!
+  theme: String!
+  text: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  blogId: Int!
+  blog: Blog!
+}
+
+type Blog {
+  id: Int!
+  title: String!
+  description: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+  userId: Int!
+  user: User!
+  posts: [Post!]
+}
+
+type LoginResponse {
+  token: String!
+}
+
+type Query {
+  getAllBlogs: [Blog!]!
+  getBlog(id: Int!): Blog!
+  users: [User!]!
+  getPost: [Post!]!
+  getAllPosts: [Post!]!
+}
+
+type Mutation {
+  createBlog(createBlogInput: CreateBlogInput!): Blog!
+  registration(createUserInput: CreateUserInput!): User!
+  login(loginInput: LoginInput!): LoginResponse!
+  updateUser(updatedUserInput: UpdatedUserInput!): User!
+  deleteUser(id: Int!): User!
+  createPost(createPostInput: CreatePostInput!): Post!
+}
+
+input CreateBlogInput {
+  title: String!
+  description: String!
+  userId: Float
+}
+
+input CreateUserInput {
+  role: UserRoles!
+  name: String!
+  surname: String!
+  password: String!
+  age: Int!
+  email: String!
+}
+
+input LoginInput {
+  password: String!
+  email: String!
+}
+
+input UpdatedUserInput {
+  role: UserRoles
+  name: String
+  surname: String
+  password: String
+  age: Int
+  email: String
+}
+
+input CreatePostInput {
+  header: String!
+  theme: String!
+  text: String!
+  blogId: Float!
+}
