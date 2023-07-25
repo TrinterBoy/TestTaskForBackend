@@ -20,7 +20,7 @@ jobs:
         id: imageName-lowercase
         uses: ASzc/change-string-case-action@v5
         env:
-          REPO_NAME: docker.pkg.github.com/${{ github.repository }}/${{ env.APP_NAME }}-${{ github.run_number }}
+          REPO_NAME: docker.pkg.github.com/${{ github.repository }}/${{ env.APP_NAME }}:${{ github.run_number }}
         with:
           string: ${{ env.REPO_NAME }}
 
