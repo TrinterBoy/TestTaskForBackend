@@ -48,14 +48,14 @@ jobs:
           min-versions-to-keep: 2
 
       - name: EC2 configuration
+        env:
+          SERVICE_NAME: app
+          SERVICE_IMAGE: ${{ steps.imageName-lowercase.outputs.lowercase }}
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ vars.EC2_USER }}
           key: ${{ secrets.ACTION_PRIVATE_KEY }}
-          env:
-            SERVICE_NAME: app
-            SERVICE_IMAGE: ${{ steps.imageName-lowercase.outputs.lowercase }}
           script: |
             sudo su 
             
