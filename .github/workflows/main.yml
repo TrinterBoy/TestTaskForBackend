@@ -38,7 +38,7 @@ jobs:
         id: packageName-lowercase
         uses: ASzc/change-string-case-action@v5
         env:
-          PACKAGE_NAME: ${{ github.event.repository.name }}/{{ env.APP_NAME }}
+          PACKAGE_NAME: ${{ github.event.repository.name }}/${{ env.APP_NAME }}
         with:
           string: ${{ env.PACKAGE_NAME }}
 
