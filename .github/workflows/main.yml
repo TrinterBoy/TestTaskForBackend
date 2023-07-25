@@ -62,6 +62,8 @@ jobs:
           script: |
             sudo su 
             
+            sudo chmod 666 /var/run/docker.sock
+            
             sudo snap install yq 
             
             docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} 
