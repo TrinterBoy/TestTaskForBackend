@@ -63,8 +63,8 @@ jobs:
             sudo su 
             
             sudo chmod 666 /var/run/docker.sock
-            sudo export SERVICE_NAME=$SERVICE_NAME 
-            sudo export SERVICE_IMAGE=$SERVICE_IMAGE
+            export SERVICE_NAME=$SERVICE_NAME 
+            export SERVICE_IMAGE=$SERVICE_IMAGE
             sudo snap install yq 
             
             docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} 
