@@ -73,8 +73,7 @@ jobs:
             
             export SERVICE_NAME=$SERVICE_NAME 
             export SERVICE_IMAGE=$SERVICE_IMAGE
-            echo $SERVICE_NAME
-            echo $SERVICE_IMAGE
-            sudo cat docker-compose.yaml | yq e -i '.services.$SERVICE_NAME.image=env(SERVICE_IMAGE)' docker-compose.yaml 
+
+            sudo yq e -i '.services.$SERVICE_NAME.image=env(SERVICE_IMAGE)' docker-compose.yaml 
             
             docker-compose up -d
