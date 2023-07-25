@@ -4,6 +4,7 @@ on:
     branches: [main]
 env:
   APP_NAME: TestTaskForBackend
+permissions: write-all
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
