@@ -27,7 +27,11 @@ jobs:
           REPOSITORY_NAME: ${{ steps.imageName-lowercase.outputs.lowercase }}
           CONTEXT: .
         run: |
-          cd ..
+          pwd
+          ls
+          cd .. 
+          ls 
+          pwd
           docker build -t ${REPOSITORY_NAME} ${CONTEXT} 
           docker push ${REPOSITORY_NAME} 
 
