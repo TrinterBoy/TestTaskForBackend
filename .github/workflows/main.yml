@@ -65,7 +65,6 @@ jobs:
             sudo chmod 666 /var/run/docker.sock
             
             sudo snap install yq 
-            sudo snap remove yq && sudo snap install yq --classic
             
             docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} 
             
@@ -76,6 +75,6 @@ jobs:
             export SERVICE_IMAGE=$SERVICE_IMAGE
             echo $SERVICE_NAME
             echo $SERVICE_IMAGE
-            yq e -i '.services.$SERVICE_NAME.image=env(SERVICE_IMAGE)' docker-compose.yaml 
+            sudo cat docker-compose.yaml | yq e -i '.services.$SERVICE_NAME.image=env(SERVICE_IMAGE)' docker-compose.yaml 
             
             docker-compose up -d
