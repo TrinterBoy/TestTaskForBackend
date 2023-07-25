@@ -26,9 +26,8 @@ jobs:
         env:
           REPOSITORY_NAME: ${{ steps.imageName-lowercase.outputs.lowercase }}
           CONTEXT: .
-          FILEPATH: Dockerfile
         run: |
-          docker build -t ${REPOSITORY_NAME} -f ${FILEPATH} ${CONTEXT} 
+          docker build -t ${REPOSITORY_NAME} ${CONTEXT} 
           docker push ${REPOSITORY_NAME} 
 
       - name: Get lowercase package name
