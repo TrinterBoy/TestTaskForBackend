@@ -1,0 +1,74 @@
+name: CI/CD
+on:
+  push:
+    branches: [master]
+env:
+  APP_NAME: TestTaskForBackend
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to GitHub Packages
+        shell: bash
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Convert to repository name lowercase
+        id: imageName-lowercase
+        uses: ASzc/change-string-case-action@v5
+        env:
+          REPO_NAME: docker.pkg.github.com/${{ github.repository }}/${{ env.APP_NAME }}-${{ github.run_number }}
+        with:
+          string: ${{ env.REPO_NAME }}
+
+      - name: Build, tag, and push docker image to GitHub Packages
+        id: build-image
+        shell: bash
+        env:
+          REPOSITORY_NAME: ${{ steps.imageName-lowercase.outputs.lowercase }}
+          CONTEXT: .
+          FILEPATH: ./Dockerfile
+        run: |
+          docker build -t ${REPOSITORY_NAME} -f ${FILEPATH} ${CONTEXT} 
+          docker push ${REPOSITORY_NAME} 
+
+      - name: Get lowercase package name
+        id: packageName-lowercase
+        uses: ASzc/change-string-case-action@v5
+        env:
+          PACKAGE_NAME: ${{ github.event.repository.name }}/{{ env.APP_NAME }}
+        with:
+          string: ${{ env.PACKAGE_NAME }}
+
+      - name: Delete old images
+        id: delete-images
+        uses: actions/delete-package-versions@v4.1.1
+        with:
+          package-name: ${{ steps.packageName-lowercase.outputs.lowercase }}
+          package-type: 'container'
+          min-versions-to-keep: 2
+
+      - name: EC2 configuration
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ vars.EC2_USER }}
+          key: ${{ secrets.ACTION_PRIVATE_KEY }}
+          env:
+            SERVICE_NAME: app
+            SERVICE_IMAGE: ${{ steps.imageName-lowercase.outputs.lowercase }}
+          script: |
+            sudo su 
+            
+            sudo snap install yq 
+            
+            docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} 
+            
+            cd blog 
+            docker-compose down 
+            
+            export SERVICE_NAME=$SERVICE_NAME 
+            export SERVICE_IMAGE=$SERVICE_IMAGE
+            
+            yq e -i ".services.$SERVICE_NAME.image=env(SERVICE_IMAGE)" docker-compose.yaml 
+            
+            docker-compose up -d

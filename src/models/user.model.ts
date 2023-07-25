@@ -38,7 +38,7 @@ export class User {
   age: number;
 
   @Column()
-  @Field((type) => Int)
+  @Field()
   email: string;
 
   @Column()

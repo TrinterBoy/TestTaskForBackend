@@ -8,7 +8,7 @@ type User {
   surname: String!
   role: UserRoles!
   age: Int!
-  email: Int!
+  email: String!
   password: String!
   created_at: DateTime!
   updated_at: DateTime!
@@ -52,25 +52,57 @@ type LoginResponse {
 }
 
 type Query {
-  getAllBlogs: [Blog!]!
+  getAllBlogs(offset: Int! = 0, limit: Int! = 5, sortValue: OrderTypeEnum, sortField: BlogFields, filterValue: String, filterField: BlogFields): [Blog!]!
   getBlog(id: Int!): Blog!
+  getBlogByAuthorId(id: Int!): [Blog!]!
   users: [User!]!
-  getPost: [Post!]!
-  getAllPosts: [Post!]!
+  getPost(id: Int!): Post!
+  getAllPosts(offset: Int! = 0, limit: Int! = 5, sortValue: OrderTypeEnum, sortField: PostFields, filterValue: String, filterField: PostFields): [Post!]!
+}
+
+enum OrderTypeEnum {
+  asc
+  desc
+}
+
+enum BlogFields {
+  id
+  title
+  description
+  userId
+}
+
+enum PostFields {
+  id
+  header
+  theme
+  text
+  blogId
 }
 
 type Mutation {
   createBlog(createBlogInput: CreateBlogInput!): Blog!
+  updateBlog(updateBlogInput: UpdateBlogInput!): Blog!
+  deleteBlog(id: Int!): Blog!
   registration(createUserInput: CreateUserInput!): User!
   login(loginInput: LoginInput!): LoginResponse!
   updateUser(updatedUserInput: UpdatedUserInput!): User!
   deleteUser(id: Int!): User!
   createPost(createPostInput: CreatePostInput!): Post!
+  updatePost(updatePostInput: UpdatePostInput!): Post!
+  deletePost(id: Int!): Post!
 }
 
 input CreateBlogInput {
   title: String!
   description: String!
+  userId: Float
+}
+
+input UpdateBlogInput {
+  id: Float!
+  title: String
+  description: String
   userId: Float
 }
 
@@ -102,4 +134,12 @@ input CreatePostInput {
   theme: String!
   text: String!
   blogId: Float!
+}
+
+input UpdatePostInput {
+  id: Float!
+  header: String
+  theme: String
+  text: String
+  blogId: Float
 }

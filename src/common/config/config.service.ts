@@ -19,13 +19,13 @@ class ConfigService {
     return this.getValue('APP_SECRET', true);
   }
 
-  public getJwtExpired(): string | undefined {
-    return this.getValue('JWT_EXPIRED', true);
-  }
-
   public ensureValues(keys: string[]): any {
     for (const k of keys) this.getValue(k, true);
     return this;
+  }
+
+  public getPort(): any {
+    return this.getValue('PORT');
   }
 
   public getTypeOrmConfig(): TypeOrmModuleOptions {
