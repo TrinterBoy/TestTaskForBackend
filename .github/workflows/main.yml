@@ -74,6 +74,6 @@ jobs:
             export SERVICE_NAME=$SERVICE_NAME 
             export SERVICE_IMAGE=$SERVICE_IMAGE
             
-            yq e -i ".services.$SERVICE_NAME.image=env(SERVICE_IMAGE)" docker-compose.yaml 
+            yq e -i ".services.$SERVICE_NAME.image=env(SERVICE_IMAGE)" docker-compose.yml 
             
             docker-compose up -d
