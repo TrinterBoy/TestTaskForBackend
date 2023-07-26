@@ -77,6 +77,6 @@ jobs:
             echo $NAME
             echo $IMAGE
 
-            yq e -i '.services.$SERVICE_NAME.image=env(SERVICE_IMAGE)' docker-compose.yaml 
+            yq e -i '.services.$NAME.image=env(IMAGE)' docker-compose.yaml 
             
             docker-compose up -d
