@@ -52,8 +52,8 @@ jobs:
 
       - name: EC2 configuration
         env:
-          SERVICE_NAME: app
-          SERVICE_IMAGE: ${{ steps.imageName-lowercase.outputs.lowercase }}
+          NAME: app
+          IMAGE: ${{ steps.imageName-lowercase.outputs.lowercase }}
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -71,8 +71,11 @@ jobs:
             cd blog 
             docker-compose down 
             
-            export SERVICE_NAME=$SERVICE_NAME 
-            export SERVICE_IMAGE=$SERVICE_IMAGE
+            export NAME=$NAME 
+            export IMAGE=$IMAGE
+            
+            echo $NAME
+            echo $IMAGE
 
             yq e -i '.services.$SERVICE_NAME.image=env(SERVICE_IMAGE)' docker-compose.yaml 
             
