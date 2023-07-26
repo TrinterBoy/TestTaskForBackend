@@ -49,17 +49,26 @@ jobs:
           package-name: ${{ steps.packageName-lowercase.outputs.lowercase }}
           package-type: 'container'
           min-versions-to-keep: 2
+          
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.ACTION_PRIVATE_KEY }}" > ~/.ssh/github-actions-key
+          chmod 600 ~/.ssh/github-actions-key
+          cat >>~/.ssh/config <<END
+          Host VM
+            HostName ${{ secrets.SSH_HOST }}
+            User ${{ vars.EC2_USER }}
+            IdentityFile ~/.ssh/github-actions-key
+            StrictHostKeyChecking no
+          END
 
       - name: EC2 configuration
         env:
           NAME: app
           IMAGE: ${{ steps.imageName-lowercase.outputs.lowercase }}
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ vars.EC2_USER }}
-          key: ${{ secrets.ACTION_PRIVATE_KEY }}
-          script: |
+          run: |  
+            ssh VM bash -s <<EOF
             sudo su 
             
             sudo chmod 666 /var/run/docker.sock
@@ -80,3 +89,4 @@ jobs:
             yq e -i '.services.$NAME.image=env(IMAGE)' docker-compose.yaml 
             
             docker-compose up -d
+            EOF
