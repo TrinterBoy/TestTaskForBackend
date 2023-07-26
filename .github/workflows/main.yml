@@ -67,26 +67,26 @@ jobs:
         env:
           NAME: app
           IMAGE: ${{ steps.imageName-lowercase.outputs.lowercase }}
-          run: |  
-            ssh VM bash -s <<EOF
-            sudo su 
+        run: |  
+          ssh VM bash -s <<EOF
+          sudo su 
+          
+          sudo chmod 666 /var/run/docker.sock
             
-            sudo chmod 666 /var/run/docker.sock
+          sudo snap install yq 
             
-            sudo snap install yq 
+          docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} 
             
-            docker login docker.pkg.github.com -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} 
+          cd blog 
+          docker-compose down 
             
-            cd blog 
-            docker-compose down 
+          export NAME=$NAME 
+          export IMAGE=$IMAGE
             
-            export NAME=$NAME 
-            export IMAGE=$IMAGE
-            
-            echo $NAME
-            echo $IMAGE
+          echo $NAME
+          echo $IMAGE
 
-            yq e -i '.services.$NAME.image=env(IMAGE)' docker-compose.yaml 
+          yq e -i '.services.$NAME.image=env(IMAGE)' docker-compose.yaml 
             
-            docker-compose up -d
-            EOF
+          docker-compose up -d
+          EOF
