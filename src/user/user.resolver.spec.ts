@@ -37,7 +37,6 @@ describe('UserResolver', () => {
   });
 
   it('should call userService.createUser when registration mutation is called', async () => {
-    // Arrange
     const createUserInput: CreateUserInput = {
       role: UserRoles.MODERATOR,
       name: "Sasha",
@@ -47,37 +46,29 @@ describe('UserResolver', () => {
       email: "sashad1903@gmail.com"
     };
 
-    // Act
     await resolver.registration(createUserInput);
 
-    // Assert
     expect(mockUserService.createUser).toHaveBeenCalledWith(createUserInput);
   });
 
   it('should call userService.login when login mutation is called', async () => {
-    // Arrange
     const loginInput: LoginInput = {
       email:"sashad1903@gmail.com",
       password:"1234qwer"
     } as LoginInput;
 
-    // Act
     await resolver.login(loginInput);
 
-    // Assert
     expect(mockUserService.login).toHaveBeenCalledWith(loginInput);
   });
 
   it('should call userService.getAll when users query is called', async () => {
-    // Act
     await resolver.users();
 
-    // Assert
     expect(mockUserService.getAll).toHaveBeenCalled();
   });
 
   it('should call userService.updateUser when updateUser mutation is called', async () => {
-    // Arrange
     const user = new User();
     user.id= 1;
     user.role= UserRoles.MODERATOR;
@@ -91,15 +82,12 @@ describe('UserResolver', () => {
       password: "1234qwer",
     };
 
-    // Act
     await resolver.updateUser(user, updatedUserInput);
 
-    // Assert
     expect(mockUserService.updateUser).toHaveBeenCalledWith(user, updatedUserInput);
   });
 
   it('should call userService.deleteUser when deleteUser mutation is called', async () => {
-    // Arrange
     const user = new User();
     user.id= 1;
     user.role= UserRoles.MODERATOR;
@@ -110,10 +98,8 @@ describe('UserResolver', () => {
     user.email= "sashad1903@gmail.com"
     const id = 1;
 
-    // Act
     await resolver.deleteUser(user, id);
 
-    // Assert
     expect(mockUserService.deleteUser).toHaveBeenCalledWith(user, id);
   });
 });
