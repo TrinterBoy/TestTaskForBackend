@@ -79,7 +79,7 @@ jobs:
             
           cd blog 
           docker-compose down 
-            
+          
           export NAME=$NAME 
           export IMAGE=$IMAGE
             
