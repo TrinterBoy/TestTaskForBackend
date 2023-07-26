@@ -187,7 +187,7 @@ mutation {
 }
 ```
 **Example 4**: Fetching a Single Blog with its Posts
-```
+```graphql
 query {
   getBlog(id: 123) {
     id
@@ -207,7 +207,7 @@ query {
 }
 ```
 **Example 5**: Fetching Blogs by Author ID
-```
+```graphql
 query {
   getBlogByAuthorId(id: 456) {
     id
@@ -222,7 +222,7 @@ query {
 ```
 
 **Example 6**: Fetching a Single Post
-```
+```graphql
 query {
   getPost(id: 789) {
     id
@@ -237,7 +237,7 @@ query {
 }
 ```
 **Example 7**: Updating a Blog
-```
+```graphql
 mutation {
   updateBlog(updateBlogInput: {
     id: 123
@@ -252,7 +252,7 @@ mutation {
 }
 ```
 **Example 10**: Creating a Post
-```
+```graphql
 mutation {
   createPost(createPostInput: {
     header: "New Post Header"
