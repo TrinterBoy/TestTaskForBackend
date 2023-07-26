@@ -76,6 +76,11 @@ export class UserService {
   ): Promise<User> {
     try {
       let user = await this.getByEmail(requestUser.email);
+      if (updatedUserInput.password) {
+        updatedUserInput.password = await this.encryptPassword(
+          updatedUserInput.password,
+        );
+      }
       user = { ...user, ...updatedUserInput };
       await this.userRepository.save(user);
       return await this.getOne(user.id);

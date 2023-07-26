@@ -9,9 +9,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Get Code  
+      - name: Get Code
         uses: actions/checkout@v3
-         
+
       - name: Login to GitHub Packages
         shell: bash
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
@@ -49,7 +49,7 @@ jobs:
           package-name: ${{ steps.packageName-lowercase.outputs.lowercase }}
           package-type: 'container'
           min-versions-to-keep: 2
-          
+
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
