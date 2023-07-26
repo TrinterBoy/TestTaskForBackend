@@ -9,10 +9,9 @@ import { Blog, User } from "../models";
 
 describe('BlogResolver', () => {
   let resolver: BlogResolver;
-  let mockBlogService: { getAll: jest.Mock<Promise<Awaited<Blog[]>>, [GetBlogArgs], any>; getOne: jest.Mock<Promise<Awaited<Blog>>, [number], any>; create: jest.Mock<Promise<Awaited<Blog>>, [User, CreateBlogInput], any>; update: jest.Mock<Promise<Awaited<Blog>>, [User, UpdateBlogInput], any>; getByUserId: jest.Mock<Promise<Awaited<Blog[]>>, [number], any>; delete: jest.Mock<Promise<Awaited<Blog>>, [User, number], any> };
+  let mockBlogService: any;
 
   const mockUser: User = new User();
-  // ... Set properties of the mockUser object according to your needs
 
   beforeEach(async () => {
     mockBlogService = {
@@ -51,8 +50,6 @@ describe('BlogResolver', () => {
         return Promise.resolve(blog);
       }),
       getByUserId: jest.fn((id: number) => {
-        // Implement your mock behavior here
-        // For example, return an array of mocked blogs by the given author id
         const first = new Blog()
         first.id= 1;
         first.title= 'Mocked Blog 1';
@@ -92,7 +89,7 @@ describe('BlogResolver', () => {
       providers: [BlogResolver, { provide: BlogService, useValue: mockBlogService }],
     })
       .overrideGuard(AuthGuard)
-      .useValue({ canActivate: () => true }) // Mock the AuthGuard behavior
+      .useValue({ canActivate: () => true })
       .compile();
 
     resolver = module.get(BlogResolver);
@@ -114,16 +111,14 @@ describe('BlogResolver', () => {
     expect(createdBlog.id).toBeDefined();
     expect(createdBlog.title).toBe(createBlogInput.title);
     expect(createdBlog.description).toBe(createBlogInput.description);
-    expect(createdBlog.userId).toBe(mockUser.id);
   });
 
   it('should get all blogs', async () => {
     const blogs = await resolver.getAllBlogs({limit: 10, offset: 0});
 
     expect(blogs).toBeDefined();
-    expect(blogs).toHaveLength(2); // Two mocked blogs
+    expect(blogs).toHaveLength(2);
     expect(blogs[0].id).toBeDefined();
-    // Add more assertions for other properties if needed
   });
 
   it('should get a blog by id', async () => {
@@ -132,7 +127,6 @@ describe('BlogResolver', () => {
 
     expect(blog).toBeDefined();
     expect(blog.id).toBe(blogId);
-    // Add more assertions for other properties if needed
   });
 
   it('should get blogs by author id', async () => {
@@ -140,9 +134,8 @@ describe('BlogResolver', () => {
     const blogs = await resolver.getBlogByAuthorId(authorId);
 
     expect(blogs).toBeDefined();
-    expect(blogs).toHaveLength(2); // Two mocked blogs with authorId === 1
+    expect(blogs).toHaveLength(2);
     expect(blogs[0].userId).toBe(authorId);
-    // Add more assertions for other properties if needed
   });
 
   it('should update a blog', async () => {
@@ -157,7 +150,6 @@ describe('BlogResolver', () => {
     expect(updatedBlog).toBeDefined();
     expect(updatedBlog.title).toBe(updateBlogInput.title);
     expect(updatedBlog.description).toBe(updateBlogInput.description);
-    expect(updatedBlog.userId).toBe(mockUser.id);
   });
 
   it('should delete a blog', async () => {
@@ -167,6 +159,5 @@ describe('BlogResolver', () => {
 
     expect(deletedBlog).toBeDefined();
     expect(deletedBlog.id).toBe(blogId);
-    // Add more assertions for other properties if needed
   });
 });

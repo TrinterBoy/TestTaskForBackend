@@ -59,10 +59,8 @@ describe('BlogService', () => {
   });
 
   it('should create a new blog if the user exists', async () => {
-    // Mock the userService getOne method to return the user
     mockUserService.getOne.mockResolvedValue(mockUser);
 
-    // Mock the blogRepository create and save methods
     mockBlogRepository.create.mockReturnValue({
       id: 1,
       ...mockCreateBlogInput,
@@ -117,20 +115,20 @@ describe('BlogService', () => {
     } as GetBlogArgs;
 
     const mockBlog = new Blog();
-    mockBlog.id = 1; // Assuming 'blogId' is a variable with a valid value
+    mockBlog.id = 1;
     mockBlog.title = 'Test Blog 1';
     mockBlog.description = 'This is a test blog 1.';
     mockBlog.userId = 1;
-    mockBlog.user = null; // Replace with your mocked user if needed
-    mockBlog.posts = []; // Replace with your mocked posts if needed
+    mockBlog.user = null;
+    mockBlog.posts = [];
 
     const mockBlog2 = new Blog();
-    mockBlog2.id = 2; // Assuming 'blogId' is a variable with a valid value
+    mockBlog2.id = 2;
     mockBlog2.title = 'Test Blog 2';
     mockBlog2.description = 'This is a test blog 2.';
     mockBlog2.userId = 1;
-    mockBlog2.user = null; // Replace with your mocked user if needed
-    mockBlog2.posts = []; // Replace with your mocked posts if needed
+    mockBlog2.user = null;
+    mockBlog2.posts = [];
 
 
     const mockBlogs: Blog[] = [
@@ -138,12 +136,10 @@ describe('BlogService', () => {
       { ...mockBlog2},
     ];
 
-    // Mock the blogRepository find method to return the mockBlogs array
     mockBlogRepository.find.mockResolvedValue(mockBlogs);
 
     const result = await service.getAll(mockGetBlogArgs as GetBlogArgs);
 
-    // Assert that blogRepository find method was called with the correct arguments
     expect(mockBlogRepository.find).toHaveBeenCalledWith({
       relations: { user: true, posts: true },
       skip: mockGetBlogArgs.offset,
@@ -152,7 +148,6 @@ describe('BlogService', () => {
       where: { [mockGetBlogArgs.filterField]: mockGetBlogArgs.filterValue },
     });
 
-    // Assert that the result matches the expected blogs array
     expect(result).toEqual(mockBlogs);
   });
 
@@ -176,7 +171,6 @@ describe('BlogService', () => {
       relations: { user: true, posts: true },
     });
 
-    // Assert that the result matches the expected blog object
     expect(result).toEqual(mockBlog);
   });
 
@@ -187,35 +181,32 @@ describe('BlogService', () => {
     mockBlog1.id = 1;
     mockBlog1.title = 'Test Blog 1';
     mockBlog1.description = 'This is a test blog 1.';
-    mockBlog1.userId = userId; // Assuming 'userId' is a variable with a valid value
-    mockBlog1.user = null; // Replace with your mocked user if needed
-    mockBlog1.posts = []; // Replace with your mocked posts if needed
+    mockBlog1.userId = userId;
+    mockBlog1.user = null;
+    mockBlog1.posts = [];
 
     const mockBlog2 = new Blog();
-    mockBlog2.id = 2; // Assuming 'blogId' is a variable with a valid value
+    mockBlog2.id = 2;
     mockBlog2.title = 'Test Blog';
     mockBlog2.description = 'This is a test blog.';
     mockBlog2.userId = 1;
-    mockBlog2.user = null; // Replace with your mocked user if needed
-    mockBlog2.posts = []; // Replace with your mocked posts if needed
+    mockBlog2.user = null;
+    mockBlog2.posts = [];
 
     const mockBlogs: Blog[] = [
           {...mockBlog1},
       {...mockBlog2},
     ];
 
-    // Mock the blogRepository find method to return the mockBlogs array
     mockBlogRepository.find.mockResolvedValue(mockBlogs);
 
     const result = await service.getByUserId(userId);
 
-    // Assert that blogRepository find method was called with the correct arguments
     expect(mockBlogRepository.find).toHaveBeenCalledWith({
       relations: { user: true, posts: true },
       where: { user: { id: userId } },
     });
 
-    // Assert that the result matches the expected blogs array
     expect(result).toEqual(mockBlogs);
   });
 
@@ -249,13 +240,11 @@ describe('BlogService', () => {
       relations: { user: true },
     });
 
-    // Assert that blogRepository save method was called with the updated blog data
     expect(mockBlogRepository.save).toHaveBeenCalledWith({
       ...mockUpdatedBlog,
       ...mockUpdateBlogInput,
     });
 
-    // Assert that the result matches the updated blog object
     expect(result).toEqual(mockUpdatedBlog);
   });
 
@@ -271,16 +260,15 @@ describe('BlogService', () => {
     };
 
     const mockBlog = new Blog();
-    mockBlog.id = blogId; // Assuming 'blogId' is a variable with a valid value
+    mockBlog.id = blogId;
     mockBlog.title = 'Test Blog';
     mockBlog.description = 'This is a test blog.';
     mockBlog.userId = 1;
-    mockBlog.user = {id:1}as User; // Replace with your mocked user if needed
-    mockBlog.posts = []; // Replace with your mocked posts if needed
+    mockBlog.user = {id:1}as User;
+    mockBlog.posts = [];
 
     mockBlogRepository.findOne.mockResolvedValue(mockBlog);
 
-    // Assert that updating the blog with insufficient permissions throws a ForbiddenError
     await expect(
       service.update(mockRequestUser, mockUpdateBlogInput),
     ).rejects.toThrowError('You dont have permission to update this blog');
@@ -291,12 +279,12 @@ describe('BlogService', () => {
     const blogId = 1;
 
     const mockBlog = new Blog();
-    mockBlog.id = blogId; // Assuming 'blogId' is a variable with a valid value
+    mockBlog.id = blogId;
     mockBlog.title = 'Test Blog';
     mockBlog.description = 'This is a test blog.';
     mockBlog.userId = 1;
-    mockBlog.user = {id:1} as User; // Replace with your mocked user if needed
-    mockBlog.posts = []; // Replace with your mocked posts if needed
+    mockBlog.user = {id:1} as User;
+    mockBlog.posts = [];
 
     mockBlogRepository.findOne.mockResolvedValue(mockBlog);
 
@@ -309,10 +297,8 @@ describe('BlogService', () => {
       relations: { user: true },
     });
 
-    // Assert that blogRepository delete method was called with the correct blog ID
     expect(mockBlogRepository.delete).toHaveBeenCalledWith({ id: blogId });
 
-    // Assert that the result matches the deleted blog object
     expect(result).toEqual(mockBlog);
   });
 
@@ -321,12 +307,12 @@ describe('BlogService', () => {
     const blogId = 1;
 
     const mockBlog = new Blog();
-    mockBlog.id = blogId; // Assuming 'blogId' is a variable with a valid value
+    mockBlog.id = blogId;
     mockBlog.title = 'Test Blog';
     mockBlog.description = 'This is a test blog.';
     mockBlog.userId = 1;
-    mockBlog.user = { id: 1, name: 'testuser' } as User; // Replace with your mocked user if needed
-    mockBlog.posts = []; // Replace with your mocked posts if needed
+    mockBlog.user = { id: 1, name: 'testuser' } as User;
+    mockBlog.posts = [];
 
 
     mockBlogRepository.findOne.mockResolvedValue(mockBlog);

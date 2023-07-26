@@ -15,7 +15,7 @@ describe('PostService', () => {
 
   const mockUser: User = new User();
   mockUser.id = 3;
-  mockUser.role = UserRoles.MODERATOR; // Assuming the user is a writer.
+  mockUser.role = UserRoles.MODERATOR;
 
   const mockPost: Post = new Post();
   mockPost.id = 1;
